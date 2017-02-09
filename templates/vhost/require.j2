@@ -1,0 +1,39 @@
+{% if apache_version == '2.4' %}
+  {# TODO: Allow for Additional Require Directives:
+  https://httpd.apache.org/docs/2.4/mod/mod_authz_core.html#requireall #}
+  {% if dir_statement['require'] is defined | length > 0 %}
+    {% for require in dir_statement['require'] %}
+  Require {{ require }}
+    {% endfor %}
+  {% endif %}
+  {% if dir_statement['auth_require'] is defined %}
+  Require {{ dir_statement['auth_require'] }}
+  {% endif %}
+  {% if dir_statement['auth_require'] is defined and dir_statement['require'] is not defined %}
+  Require all granted
+  {% endif %}
+{% else %}
+  {% if dir_statement['auth_require'] is defined %}
+  Require {{ dir_statement['auth_require'] }}
+  {% endif %}
+  {% if dir_statement['order'] is defined and dir_statement['order'] | length > 0 %}
+  Order {{ dir_statement['order'] | join(" ") }}
+  {% else %}
+  Order allow,deny
+  {% endif %}
+  {% if dir_statement['deny'] is defined and dir_statement['deny'] | length > 0 %}
+    {% for deny in dir_statement['deny'] %}
+  Deny {{ deny }}
+    {% endfor %}
+  {% endif %}
+  {% if dir_statement['allow'] is defined and dir_statement['allow'] | length > 0 %}
+    {% for allow in dir_statement['allow'] %}
+  Allow {{ allow }}
+    {% endfor %}
+  {% else %}
+  Allow from all
+  {% endif %}
+  {% if dir_statement['satisfy'] is defined %}
+  Satisfy {{ dir_statement['satisfy'] }}
+  {% endif %}
+{% endif %}

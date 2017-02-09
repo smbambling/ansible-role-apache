@@ -1,6 +1,4 @@
 ---
-apache_restart_state: restarted
-
 # main.yml
 apache_packages:
 apache_service:
@@ -9,8 +7,58 @@ apache_enabled:
 apache_user:
 apache_group:
 
-# configure.yml
-apache_conf_file_template:
+apache_httpd_dir:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
+apache_log_dir:
+apache_vhost_dir:
+apache_ports_file: "{{ apache_conf_dir }}/ports.conf"
+
+apache_ssl_certs_dir:
+apache_ssl_default_cert:
+apache_ssl_default_key:
+
+
+# VirtualHost Defaults
+apache_vhosts_template: vhosts.j2
+apache_vhost_ip: '*'
+apache_vhost_port: '443'
+apache_vhost_ssl: True
+
+
+apache_vhosts:
+    # Non-SSL VHOST
+  - server_name: 'localhost'
+    serveraliases:
+      - foo
+      - bar
+    port: 80
+    ssl: False
+    docroot: '/var/www/html'
+    aliases:
+      - aliasmatch: 'steve'
+        path: 'bambling'
+      - alias: 'blah'
+        path: 'baz'
+      - scriptalias: 'f/mailman/'
+        path: '/usr/local/mailman/cgi-bin/'
+    redirects:
+      - redirect: '/index.hmtl'
+        destination: 'http://www.arin.net/'
+      - redirect: '/foo.html'
+        destination: 'http://www.google.com'
+    headers:
+      - 'echo ^TS'
+    directories:
+      - provider: 'directory'
+        header:
+          - 'echo ^TS'
+        path: '/usr/local/mailman/cgi-bin/'
+        options:
+          - 'MultiViews'
+          - 'FollowSymLinks'
+    custom_fragment: '#foobar'
+    # SSL VHOST
+  - server_name: 'localhost'
+    docroot: '/var/www/html'

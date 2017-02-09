@@ -1,0 +1,14 @@
+  ## Logging
+{% if item['error_log_destination'] is defined %}
+  ErrorLog {{ item['error_log_destination'] }}/{{ apache_vhost_filename }}_error.log
+{% else %}
+  ErrorLog {{ apache_log_dir }}/{{ apache_vhost_filename }}_error.log
+{% endif %}
+{% if item['log_level'] is defined %}
+  LogLevel {{ item['log_level'] }}
+{% endif %}
+{% if item['access_log_destination'] is defined %}
+  CustomLog {{ item['access_log_destination'] }}/{{ apache_vhost_filename }}_access.log
+{% else %}
+  CustomLog {{ apache_log_dir }}/{{ apache_vhost_filename }}_access.log combined
+{% endif %}

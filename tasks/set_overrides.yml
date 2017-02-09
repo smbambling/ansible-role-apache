@@ -29,10 +29,10 @@
     apache_enabled: "{{ _apache_enabled }}"
   when: apache_enabled is none
 
-- name: Set fact apache_conf_file_template
+- name: Set fact apache_httpd_dir
   set_fact:
-    apache_conf_file_template: "{{ _apache_conf_file_template }}"
-  when: apache_conf_file_template is none
+    apache_httpd_dir: "{{ _apache_httpd_dir }}"
+  when: apache_httpd_dir is none
 
 - name: Set fact apache_conf_file
   set_fact:
@@ -44,7 +44,32 @@
     apache_conf_dir: "{{ _apache_conf_dir }}"
   when: apache_conf_dir is none
 
+- name: Set fact apache_vhost_dir
+  set_fact:
+    apache_vhost_dir: "{{ _apache_vhost_dir }}"
+  when: apache_vhost_dir is none
+
 - name: Set fact apache_confd_dir
   set_fact:
     apache_confd_dir: "{{ _apache_confd_dir }}"
   when: apache_confd_dir is none
+
+- name: Set fact apache_log_dir
+  set_fact:
+    apache_log_dir: "{{ _apache_log_dir }}"
+  when: apache_log_dir is none
+
+- name: Set fact apache_ssl_certs_dir
+  set_fact:
+    apache_ssl_certs_dir: "{{ _apache_ssl_certs_dir }}"
+  when: apache_ssl_certs_dir is none
+
+- name: Set fact apache_ssl_default_cert
+  set_fact:
+    apache_ssl_default_cert: "{{ _apache_ssl_default_cert }}"
+  when: apache_ssl_default_cert is none
+
+- name: Set fact apache_ssl_default_key
+  set_fact:
+    apache_ssl_default_key: "{{ _apache_ssl_default_key }}"
+  when: apache_ssl_default_key is none

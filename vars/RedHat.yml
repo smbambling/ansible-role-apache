@@ -2,12 +2,19 @@
 _apache_packages:
   - httpd
   - httpd-devel
+  - mod_ssl
 _apache_group: 'apache'
 _apache_user: 'apache'
 _apache_service: 'httpd'
 _apache_state: 'started'
 _apache_enabled: 'yes'
-_apache_conf_file_template: 'httpd.conf.j2'
+_apache_httpd_dir: '/etc/httpd'
 _apache_conf_file: 'httpd.conf'
 _apache_conf_dir: '/etc/httpd/conf'
-_apache_confd_dir: '/etc/httpd/conf.d'
+_apache_confd_dir: "{{ _apache_httpd_dir }}/conf.d"
+_apache_vhost_dir: "{{ _apache_httpd_dir }}/conf.d"
+
+_apache_log_dir: '/var/log/httpd'
+_apache_ssl_certs_dir: '/etc/pki/tls/certs'
+_apache_ssl_default_cert: '/etc/pki/tls/certs/localhost.crt'
+_apache_ssl_default_key: '/etc/pki/tls/private/localhost.key'

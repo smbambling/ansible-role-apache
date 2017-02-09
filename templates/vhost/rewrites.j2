@@ -1,0 +1,28 @@
+  ## Rewrite rules
+  RewriteEngine On
+{% if item['rewrite_inherit'] is defined and item['rewrite_inherit']%}
+  RewriteOptions Inherit
+{% endif %}
+
+{% for rewrite_statement in items['rewrites'] %}
+  {% if rewrite_statement['comment'] %}
+  ## {{ rewrite_statement['comment'] }}
+  {% endif %}
+  {% if rewrite_statement['rewrite_base'] is defined and rewrite_statement['rewrite_base'] != '' %}
+  RewriteBase {{ rewrite_statement['rewrite_base'] }}
+  {% endif %}
+  {% if rewrite_statement['rewrite_cond'] is defined and rewrite_statement['rewrite_cond'] | length > 0 %}
+    {% for rewrite_cond in rewrite_statement['rewrite_cond'] %}
+  RewriteCond {{ rewrite_cond }}
+    {% endfor %}
+  {% endif %}
+  {% if rewrite_statement['rewrite_map'] is defined and rewrite_statement['rewrite_map'] | length > 0 %}
+    {% for rewrite_map in rewrite_statement['rewrite_map'] %}
+  RewriteMap {{ rewrite_map }}
+    {% endfor %}
+  {% endif %}
+  {% if rewrite_statement['rewrite_rule'] is defined and rewrite_statement['rewrite_rule'] | length > 0 %}
+    {% for rewrite_rule in rewrite_statement['rewrite_rule'] %}
+  RewriteRule {{ rewrite_rule }}
+    {% endfor %}
+  {% endif %}

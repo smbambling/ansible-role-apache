@@ -1,0 +1,16 @@
+---
+- name: Set NamedVirtualHost Address:Port
+  set_fact:
+    listen_address_port: "{{ item['ip'] | default (apache_vhost_ip) }}:{{ item['port'] | default(apache_vhost_port) }}"
+  when: item['ip'] | default (apache_vhost_ip) != '*'
+
+- name: Set NamedVirtualHost Port
+  set_fact:
+    listen_address_port: "{{ item['port'] | default(apache_vhost_port) }}"
+  when: item['ip'] | default (apache_vhost_ip) == '*'
+
+- name: "Add NamedVirtualHost Listen Addres/Port for {{ item['server_name'] }}"
+  lineinfile:
+    line: "Listen {{ listen_address_port }}"
+    dest: "{{ apache_ports_file }}"
+  notify: Test and Restart Apache

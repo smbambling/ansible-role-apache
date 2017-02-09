@@ -1,6 +1,0 @@
----
-- name: "Install Apache {{ item }}"
-  package:
-    name: "{{ item }}"
-    state: present
-  become: true

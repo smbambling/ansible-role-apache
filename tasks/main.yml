@@ -2,8 +2,8 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Include set_fact tasks
-  include: set_facts.yml
+- name: Include set_overrides tasks list
+  include: set_overrides.yml
 
 - name: Install Apache/Apache Development Packages
   package:
@@ -11,40 +11,34 @@
     state: present
   with_items: "{{ apache_packages }}"
 
-# This task is after the install task meaning
-# the package ought to create them and not ansible
-- name: Manage apache group
-  group:
-    name: "{{ apache_group }}"
-    state: present
+- name: Include configure.yml task list
+  include: configure.yml
 
-- name: Manage apache user
-  user:
-    name: "{{ apache_user }}"
-    group: "{{ apache_group }}"
-    state: present
+- name: Get installed version of Apache
+  command: 'apachectl -v'
+  changed_when: false
+  check_mode: no
+  register: _apache_version_full
+
+- name: Create apache_version variable.
+  set_fact:
+    apache_version_full: "{{ _apache_version_full.stdout.split()[2].split('/')[1] }}"
+
+- name: Include Apache 22 specific vars
+  include_vars: apache22.yml
+  when: "apache_version_full.split('.')[1] == '2'"
+
+- name: Include Apache 24 specific vars
+  include_vars: apache24.yml
+  when: "apache_version_full.split('.')[1] == '4'"
+
+- name: Manage VirtualHosts
+  include: vhosts.yml
+  with_items: "{{ apache_vhosts }}"
+  when: apache_vhosts | length > 0
 
 - name: Ensure Apache has selected running and boot state
   service:
     name: "{{ apache_service }}"
     state: "{{ apache_state }}"
     enabled: "{{ apache_enabled }}"
-
-- name: Get installed version of Apache
-  shell: 'apachectl -v'
-  changed_when: false
-  check_mode: no
-  register: _apache_version
-
-- name: Create apache_version variable.
-  set_fact:
-    apache_version: "{{ _apache_version.stdout.split()[2].split('/')[1] }}"
-
-    #- include_vars: apache-22.yml
-    #  when: "apache_version.split('.')[1] == '2'"
-    #
-    #- include_vars: apache-24.yml
-    #  when: "apache_version.split('.')[1] == '4'"
-
-- name: Include configuration tasks
-  include: configure.yml

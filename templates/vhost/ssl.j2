@@ -1,0 +1,43 @@
+  ## SSL directives
+  SSLEngine on
+  SSLCertificateFile    "{{ item['ssl_cert'] | default(apache_ssl_default_cert) }}"
+  SSLCertificateKeyFile "{{ item['ssl_key'] | default(apache_ssl_default_key) }}"
+{% if item['ssl_chain'] is defined and item['ssl_chain'] != '' %}
+  SSLCertificateChainFile "{{ item['ssl_chain'] }}"
+{% endif %}
+{% if item['ssl_certs_dir'] | default(apache_ssl_certs_dir) is defined %}
+  SSLCACertificatePath {{ item['ssl_certs_dir'] | default(apache_ssl_certs_dir) }}
+{% endif %}
+{% if item['ssl_ca'] is defined and item['ssl_ca'] != '' %}
+  SSLCACertificateFile "{{ item['ssl_ca'] }}"
+{% endif %}
+{% if item['ssl_crl_path'] is defined and item['ssl_crl_path'] != '' %}
+  SSLCARevocationPath "{{ item['ssl_crl_path'] }}"
+{% endif %}
+{% if item['ssl_crl'] is defined and item['ssl_crl'] != '' %}
+  SSLCARevocationFile "{{ item['ssl_crl'] }}"
+{% endif %}
+{% if item['ssl_crl_check'] is defined and item['ssl_crl_check'] != '' and apache_version == '2.4' %}
+  SSLCARevocationCheck "{{ item['ssl_crl_check'] }}"
+{% endif %}
+{% if item['ssl_protocol'] is defined and item['ssl_protocol'] != '' %}
+  SSLProtocol "{{ item['ssl_protocol'] }}"
+{% endif %}
+{% if item['ssl_cipher'] is defined and item['ssl_cipher'] != '' %}
+  SSLCipherSuite "{{ item['ssl_cipher'] }}"
+{% endif %}
+{% if item['ssl_honorcipherorder'] is defined and item['ssl_honorcipherorder'] != '' %}
+  SSLHonorCipherOrder "{{ item['ssl_honorcipherorder'] }}"
+{% endif %}
+{% if item['ssl_verify_client'] is defined and item['ssl_verify_client'] != '' %}
+  SSLVerifyClient "{{ item['ssl_verify_client'] }}"
+{% endif %}
+{% if item['ssl_verify_depth'] is defined and item['ssl_verify_depth'] != '' %}
+  SSLVerifyDepth "{{ item['ssl_verify_depth'] }}"
+{% endif %}
+{% if item['ssl_options'] is defined and item['ssl_options'] != '' %}
+  SSLOptions "{{ item['ssl_options'] }}"
+{% endif %}
+{% if item['ssl_openssl_conf_cmd'] is defined and item['ssl_options'] != '' %}
+  SSLOpenSSLConfCmd "{{ item['ssl_openssl_conf_cmd'] }}"
+{% endif %}

@@ -20,8 +20,21 @@ docker:
     - name: centos6
       image: centos
       image_version: 6
-      #- name: centos7
-      #- image: centos
-      #- image_version: 7
-      #- cap_add:
-      #-   - SYS_ADMIN
+      port_bindings:
+        80: 8080
+    - name: centos7
+      image: centos
+      image_version: 7
+      port_bindings:
+        80: 8081
+      privileged: True
+      command: '/usr/lib/systemd/systemd'
+      #volume_mounts:
+      #  - /sys/fs/cgroup:/sys/fs/cgroup:ro
+      #cap_ad:
+      #  - SYS_ADMIN
+      #environment:
+      #  container: 'docker'
+
+# Notes:
+# http://stevelaesch.tech/2016/07/06/systemd-inside-docker-container-failed-to-get-d-bus-connection-operation-not-permitted/

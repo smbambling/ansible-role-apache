@@ -1,0 +1,5 @@
+  ## Header Rules
+  ## as per http://httpd.apache.org/docs/current/mod/mod_headers.html#header
+  {% for header in item['headers'] %}
+  Header {{ header }}
+  {% endfor %}

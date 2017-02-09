@@ -1,0 +1,14 @@
+  ## Alias and ScriptAlias Declarations
+{% for alias_statement in item['aliases'] %}
+  {% if alias_statement['path'] != '' %}
+    {% if alias_statement['alias'] is defined and alias_statement['alias'] != '' %}
+  Alias "{{alias_statement['alias'] }}" "{{ alias_statement['path'] }}"
+    {% elif alias_statement['aliasmatch'] is defined and alias_statement['aliasmatch'] != '' %}
+  AliasMatch "{{ alias_statement['aliasmatch'] }}" "{{ alias_statement['path'] }}"
+    {% elif alias_statement['scriptalias'] is defined and alias_statement['scriptalias'] != '' %}
+  ScriptAlias "{{ alias_statement['scriptalias'] }}" "{{ alias_statement['path'] }}"
+    {% elif alias_statement['scriptaliasmatch'] is defined and alias_statement['scriptaliasmatch'] != '' %}
+  ScriptAliasMatch "{{ alias_statement['scriptaliasmatch'] }}" "{{ alias_statement['path'] }}"
+    {% endif %}
+  {% endif %}
+{% endfor %}

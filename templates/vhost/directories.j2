@@ -1,0 +1,71 @@
+  ## Directories, there should at least be a declaration for {{ item['docroot'] }}
+{% for dir_statement in item['directories'] %}
+  <{{ dir_statement['provider'] | capitalize}} {{ dir_statement['path'] }}>
+  {% if dir_statement['header'] is defined and dir_statement['header'] | length > 0 %}
+    {% for header in dir_statement['header'] %}
+      Header {{ header }}
+    {% endfor %}
+  {% endif %}
+  {% if dir_statement['geoip_enable'] is defined %}
+      GeoIPEnable {{ dir_statement['geoip_enable'] }}
+  {% endif %}
+  {% if dir_statement['options'] is defined and dir_statement['options'] | length > 0 %}
+      Options {{ dir_statement['options'] | join(" ") }}
+  {% endif %}
+  {% if dir_statement['provider'] ~ 'directory' and dir_statement['provider'] | length > 0 %}
+    {% if dir_statement['index_options'] is defined %}
+      IndexOptions {{ dir_statement['index_options'] | join(" ") }}
+    {% endif %}
+    {% if dir_statement['index_order_default'] is defined and dir_statement['index_order_default'] | length > 0 %}
+      IndexOrderDefault {{ dir_statement['index_order_default'] | join(" ") }}
+    {% endif %}
+    {% if dir_statement['index_style_sheet'] is defined %}
+      IndexStyleSheet {{ dir_statement['index_style_sheet'] }}
+    {% endif %}
+    {% if dir_statement['allow_override'] is defined and dir_statement['allow_override'] | length > 0 %}
+      AllowOverride {{ dir_statement['allow_override'] | join(" ") }}
+    {% elif dir_statement['provider'] ~ 'directory' %}
+      AllowOverride None
+    {% endif %}
+  {% endif %}
+  {% if apache_version == '2.4' %}
+    {# TODO: Allow for Additional Require Directives:
+    https://httpd.apache.org/docs/2.4/mod/mod_authz_core.html#requireall #}
+    {% if dir_statement['require'] is defined and dir_statement['require'] | length > 0 %}
+      {% for require in dir_statement['require'] %}
+    Require {{ require }}
+      {% endfor %}
+    {% endif %}
+    {% if dir_statement['auth_require'] is defined %}
+    Require {{ dir_statement['auth_require'] }}
+    {% endif %}
+    {% if dir_statement['auth_require'] is not defined and dir_statement['require'] is not defined %}
+    Require all granted
+    {% endif %}
+  {% else %}
+    {% if dir_statement['auth_require'] is defined %}
+    Require {{ dir_statement['auth_require'] }}
+    {% endif %}
+    {% if dir_statement['order'] is defined and dir_statement['order'] | length > 0 %}
+    Order {{ dir_statement['order'] | join(" ") }}
+    {% else %}
+    Order allow,deny
+    {% endif %}
+    {% if dir_statement['deny'] is defined and dir_statement['deny'] | length > 0 %}
+      {% for deny in dir_statement['deny'] %}
+    Deny {{ deny }}
+      {% endfor %}
+    {% endif %}
+    {% if dir_statement['allow'] is defined and dir_statement['allow'] | length > 0 %}
+      {% for allow in dir_statement['allow'] %}
+    Allow {{ allow }}
+      {% endfor %}
+    {% else %}
+    Allow from all
+    {% endif %}
+    {% if dir_statement['satisfy'] is defined %}
+    Satisfy {{ dir_statement['satisfy'] }}
+    {% endif %}
+  {% endif %}
+  </{{ dir_statement['provider'] | capitalize}}>
+{% endfor %}

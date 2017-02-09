@@ -1,13 +1,18 @@
 ---
-- name: Include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yml"
+- name: Test and Reload Apache
+  command: apachectl configtest
+  notify: Reload Apache
 
-- name: Set Apache apache_package
-  set_fact:
-    apache_service: "{{ _apache_service }}"
-  when: apache_package is none
+- name: Test and Restart Apache
+  command: apachectl configtest
+  notify: Restart Apache
 
-- name: restart apache
+- name: Reload Apache
   service:
     name: "{{ apache_service }}"
-    state: "{{ apache_restart_state }}"
+    state: 'reloaded'
+
+- name: Restart Apache
+  service:
+    name: "{{ apache_service }}"
+    state: 'restarted'

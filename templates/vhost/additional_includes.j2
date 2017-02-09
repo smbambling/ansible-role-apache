@@ -1,0 +1,7 @@
+{% for include in item['additional_includes'] %}
+  {% if apache_version == '2.4' %}
+  IncludeOptional {{ include }}
+  {% else %}
+  Include {{ include }}
+  {% endif %}
+{% endfor %}

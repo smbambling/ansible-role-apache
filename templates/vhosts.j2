@@ -1,0 +1,85 @@
+#jinja2: trim_blocks: "true", lstrip_blocks: "false"
+{{ ansible_managed | comment }}
+
+<VirtualHost {{ item['ip'] | default (apache_vhost_ip) }}:{{ item['port'] | default(apache_vhost_port) }}>
+{% if item['server_name'] is defined %}
+  ServerName {{ item['server_name'] }}
+{% endif %}
+
+{% if item['serveraliases'] is defined and item['serveraliases'] | length > 0 %}
+{% include "vhost/serveraliases.j2" %}
+{% endif %}
+
+{% if item['server_admin'] is defined %}
+  ServerAdmin {{ item['server_admin'] }}
+{% endif %}
+  ServerSignature Off
+
+  ## Vhost docroot
+{% if item['virtual_docroot'] is defined %}
+  VirtualDocumentRoot "{{ item['virtual_docroot'] }}"
+{% elif item['docroot'] is defined %}
+  DocumentRoot "{{ item['docroot'] }}"
+{% endif %}
+
+{% if item['aliases'] is defined and item['aliases'] | length > 0 %}
+{% include "vhost/aliases.j2" %}
+{% endif %}
+
+{% if item['fallbackresource'] is defined %}
+  FallbackResource item['fallbackresource']
+{% endif %}
+
+{% if item['allow_encoded_slashes'] is defined %}
+  AllowEncodedSlashes item['allow_encoded_slashes']
+{% endif %}
+
+{% if item['directories'] is defined and item['directories'] | length > 0 %}
+{% include "vhost/directories.j2" %}
+{% endif %}
+
+{% if item['additional_includes'] is defined and item['additional_includes'] | length > 0 %}
+{% include "vhost/additional_includes.j2" %}
+{% endif %}
+
+{% include "vhost/logging.j2" %}
+
+{% if item['action'] is defined %}
+  Action {{ item['action'] }}
+{% endif %}
+
+{% if item['block'] is defined and item['block'] == 'scm' %}
+  {% include "vhost/block.j2" %}
+{% endif %}
+
+{% if item['headers'] is defined and item['headers'] | length > 0 %}
+{% include "vhost/headers.j2" %}
+{% endif %}
+
+{% if item['request_headers'] is defined and item['request_headers'] | length > 0 %}
+{% include "vhost/request_headers.j2" %}
+{% endif %}
+
+{% if item['redirects'] is defined and item['redirects'] | length > 0 %}
+{% include "vhost/redirects.j2" %}
+{% endif %}
+
+{% if item['rewrites'] is defined and item['rewrites'] | length > 0 %}
+{% include "vhost/rewrites.j2" %}
+{% endif %}
+
+{% if item['ssl'] | default(apache_vhost_ssl) is defined and item['ssl'] | default(apache_vhost_ssl) %}
+{% include "vhost/ssl.j2" %}
+{% endif %}
+
+{% if item['custom_fragment'] is defined %}
+  ## Custom Fragment ##
+  {{ item['custom_fragment'] }}
+{% endif %}
+
+{% if item['charset'] is defined %}
+  AddDefaultCharset {{ item['charset'] }}
+{% endif %}
+
+
+</VirtualHost>

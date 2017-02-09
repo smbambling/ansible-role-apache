@@ -1,4 +1,4 @@
-apache (Software Collections Linux)
+Apache 
 ===
 [![Ansible Galaxy](https://img.shields.io/badge/ansible--galaxy-smbambling.apache-blue.svg)](https://galaxy.ansible.com/smbambling/apache/)
 [![Build Status](https://travis-ci.org/smbambling/ansible-role-apache.svg?branch=master)](https://travis-ci.org/smbambling/ansible-role-apache)

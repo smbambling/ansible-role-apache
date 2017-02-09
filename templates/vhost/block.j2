@@ -1,0 +1,7 @@
+  # Block access to SCM directories
+  <DirectoryMatch .*\.(svn|git|bzr|hg|ht)/.*>
+{% if apache_version == '2.4' %}
+    Require all denied
+{% else %}
+    Deny From All
+  </DirectoryMatch>

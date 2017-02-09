@@ -1,0 +1,5 @@
+  ## Request Header Rules
+  ## as per http://httpd.apache.org/docs/current/mod/mod_headers.html#requestheader
+  {% for request_header in item['request_headers'] %}
+  Header {{ request_header }}
+  {% endfor %}
