@@ -10,16 +10,18 @@
   become: true
 
 - name: Get list of files in apache conf.d directory
-  shell: ls -d -1 "{{ apache_confd_dir }}"/*
+  command: ls -d -1 "{{ apache_confd_dir }}"/*
   changed_when: false
   check_mode: no
+  ignore_errors: yes
   register: apache_confd_dir_contents
   become: true
 
 - name: Get list of managed file in apache conf.d directory
-  shell: grep -l '^# Ansible managed:' "{{ apache_confd_dir }}"/*
+  command: grep -l '^# Ansible managed:' "{{ apache_confd_dir }}"/*
   changed_when: false
   check_mode: no
+  ignore_errors: yes
   register: apache_confd_managed_files
   become: true
 
@@ -31,6 +33,3 @@
   when: >
     item not in apache_confd_managed_files.stdout_lines
   become: true
-
-
-

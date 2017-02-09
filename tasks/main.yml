@@ -31,7 +31,7 @@
     enabled: "{{ apache_enabled }}"
 
 - name: Get installed version of Apache
-  shell: 'apachectl -v'
+  command: 'apachectl -v'
   changed_when: false
   check_mode: no
   register: _apache_version
