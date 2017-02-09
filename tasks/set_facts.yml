@@ -1,0 +1,50 @@
+---
+- name: Set fact apache_packages
+  set_fact:
+    apache_packages: "{{ _apache_packages }}"
+  when: apache_packages is none
+
+- name: Set fact apache_group
+  set_fact:
+    apache_group: "{{ _apache_group }}"
+  when: apache_group is none
+
+- name: Set fact apache_user
+  set_fact:
+    apache_user: "{{ _apache_user }}"
+  when: apache_user is none
+
+- name: Set fact apache_service
+  set_fact:
+    apache_service: "{{ _apache_service }}"
+  when: apache_service is none
+
+- name: Set fact apache_state
+  set_fact:
+    apache_state: "{{ _apache_state }}"
+  when: apache_state is none
+
+- name: Set fact apache_enabled
+  set_fact:
+    apache_enabled: "{{ _apache_enabled }}"
+  when: apache_enabled is none
+
+- name: Set fact apache_conf_file_template
+  set_fact:
+    apache_conf_file_template: "{{ _apache_conf_file_template }}"
+  when: apache_conf_file_template is none
+
+- name: Set fact apache_conf_file
+  set_fact:
+    apache_conf_file: "{{ _apache_conf_file }}"
+  when: apache_conf_file is none
+
+- name: Set fact apache_conf_dir
+  set_fact:
+    apache_conf_dir: "{{ _apache_conf_dir }}"
+  when: apache_conf_dir is none
+
+- name: Set fact apache_confd_dir
+  set_fact:
+    apache_confd_dir: "{{ _apache_confd_dir }}"
+  when: apache_confd_dir is none

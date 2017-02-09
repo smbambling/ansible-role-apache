@@ -1,0 +1,50 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Include set_fact tasks
+  include: set_facts.yml
+
+- name: Install Apache/Apache Development Packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ apache_packages }}"
+
+# This task is after the install task meaning
+# the package ought to create them and not ansible
+- name: Manage apache group
+  group:
+    name: "{{ apache_group }}"
+    state: present
+
+- name: Manage apache user
+  user:
+    name: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    state: present
+
+- name: Ensure Apache has selected running and boot state
+  service:
+    name: "{{ apache_service }}"
+    state: "{{ apache_state }}"
+    enabled: "{{ apache_enabled }}"
+
+- name: Get installed version of Apache
+  shell: 'apachectl -v'
+  changed_when: false
+  check_mode: no
+  register: _apache_version
+
+- name: Create apache_version variable.
+  set_fact:
+    apache_version: "{{ _apache_version.stdout.split()[2].split('/')[1] }}"
+
+    #- include_vars: apache-22.yml
+    #  when: "apache_version.split('.')[1] == '2'"
+    #
+    #- include_vars: apache-24.yml
+    #  when: "apache_version.split('.')[1] == '4'"
+
+- name: Include configuration tasks
+  include: configure.yml

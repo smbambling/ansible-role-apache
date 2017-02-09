@@ -1,0 +1,16 @@
+---
+apache_restart_state: restarted
+
+# main.yml
+apache_packages:
+apache_service:
+apache_state:
+apache_enabled:
+apache_user:
+apache_group:
+
+# configure.yml
+apache_conf_file_template:
+apache_conf_file:
+apache_conf_dir:
+apache_confd_dir:
