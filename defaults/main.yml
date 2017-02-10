@@ -1,6 +1,4 @@
 ---
-apache_restart_state: restarted
-
 # main.yml
 apache_packages:
 apache_service:

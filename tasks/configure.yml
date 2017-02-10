@@ -6,30 +6,22 @@
     owner: "{{ apache_user }}"
     group: "{{ apache_group }}"
     mode: '0644'
-  notify: restart apache
+  notify: Test and Restart Apache
   become: true
 
-- name: Get list of files in apache conf.d directory
-  command: ls -d -1 "{{ apache_confd_dir }}"/*
-  changed_when: false
-  check_mode: no
-  ignore_errors: yes
-  register: apache_confd_dir_contents
-  become: true
-
-- name: Get list of managed file in apache conf.d directory
-  command: grep -l '^# Ansible managed:' "{{ apache_confd_dir }}"/*
-  changed_when: false
-  check_mode: no
-  ignore_errors: yes
-  register: apache_confd_managed_files
+- name: Get list of unmanaged file in apache conf.d directory
+  find:
+    file_type: 'file'
+    follow: no
+    recurse: no
+    paths: "{{ apache_confd_dir }}"
+    contains: '^((?!Ansible managed).)*$'
+  register: apache_unmanaged_configs
   become: true
 
 - name: Remove unmanged apache conf.d files
   file:
     path: "{{ item }}"
     state: absent
-  with_items: "{{ apache_confd_dir_contents.stdout_lines }}"
-  when: >
-    item not in apache_confd_managed_files.stdout_lines
+  with_items: "{{ apache_unmanaged_configs.files|d({}) | map(attribute='path') | list }}"
   become: true
