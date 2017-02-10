@@ -12,3 +12,6 @@ apache_conf_file_template:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
+
+# mods/ssl.yml
+apache_package_mod_ssl:

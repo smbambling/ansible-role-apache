@@ -1,0 +1,18 @@
+---
+- name: Include set_mod_facts
+  include: set_mod_facts.yml
+
+- name: Install Apache module mod_ssl
+  package:
+    name: "{{ apache_package_mod_ssl }}"
+    state: present
+
+- name: Configure Apache module mod_ssl
+  template:
+    src: mods/ssl.conf.j2
+    dest: "{{ apache_mod_ssl_config }}"
+    owner: root
+    group: root
+    setype: httpd_config_t
+    mode: '0644'
+  notify: Test and Restart Apache

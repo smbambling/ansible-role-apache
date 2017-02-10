@@ -48,3 +48,6 @@
 
 - name: Include configuration tasks
   include: configure.yml
+
+- name: Include mod_ssl
+  include: mods/ssl.yml

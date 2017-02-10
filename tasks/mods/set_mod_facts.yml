@@ -1,0 +1,5 @@
+---
+- name: Set fact apache_package_mod_ssl
+  set_fact:
+    apache_package_mod_ssl: "{{ _apache_package_mod_ssl }}"
+  when: apache_package_mod_ssl is none
