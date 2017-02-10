@@ -19,9 +19,14 @@
   register: apache_unmanaged_configs
   become: true
 
+- name: Set fact for unmanaged apache conf.d files
+  set_fact:
+    apache_unmanaged_configs_list:
+      "{{ apache_unmanaged_configs.files|d({}) | map(attribute='path') | list }}"
+
 - name: Remove unmanged apache conf.d files
   file:
     path: "{{ item }}"
     state: absent
-  with_items: "{{ apache_unmanaged_configs.files|d({}) | map(attribute='path') | list }}"
+  with_items: "{{ apache_unmanaged_configs_list }}"
   become: true
