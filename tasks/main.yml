@@ -40,14 +40,30 @@
   set_fact:
     apache_version: "{{ _apache_version.stdout.split()[2].split('/')[1] }}"
 
-    #- include_vars: apache-22.yml
-    #  when: "apache_version.split('.')[1] == '2'"
-    #
-    #- include_vars: apache-24.yml
-    #  when: "apache_version.split('.')[1] == '4'"
+- name: Include Apache 22 specific vars
+  include_vars: apache22.yml
+  when: "apache_version.split('.')[1] == '2'"
 
-- name: Include configuration tasks
-  include: configure.yml
+- name: Include Apache 24 specific vars
+  include_vars: apache24.yml
+  when: "apache_version.split('.')[1] == '4'"
 
-- name: Include mod_ssl
+- name: Configure Apache httpd.conf
+  template:
+    src: "{{ apache_conf_template }}"
+    dest: "{{ apache_conf_dir }}/{{ apache_conf_file }}"
+    owner: "{{ apache_user }}"
+    group: "{{ apache_group }}"
+    setype: httpd_config_t
+    mode: '0644'
+  when: apache_conf_manage
+  notify: Test and Restart Apache
+  become: true
+
+- name: Manage mod_ssl
   include: mods/ssl.yml
+  when: apache_mod_ssl_manage
+
+- name: Manage mod_status
+  include: mods/status.yml
+  when: apache_mod_status_manage

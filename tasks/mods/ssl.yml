@@ -1,18 +1,21 @@
 ---
-- name: Include set_mod_facts
-  include: set_mod_facts.yml
+- name: Set fact apache_mod_ssl_package
+  set_fact:
+    apache_mod_ssl_package: "{{ _apache_mod_ssl_package }}"
+  when: apache_mod_ssl_package is none
 
 - name: Install Apache module mod_ssl
   package:
-    name: "{{ apache_package_mod_ssl }}"
+    name: "{{ apache_mod_ssl_package }}"
     state: present
 
 - name: Configure Apache module mod_ssl
   template:
-    src: mods/ssl.conf.j2
-    dest: "{{ apache_mod_ssl_config }}"
+    src: "{{ apache_mod_ssl_template }}"
+    dest: "{{apache_confd_dir }}/{{ apache_mod_ssl_conf_file }}"
     owner: root
     group: root
     setype: httpd_config_t
     mode: '0644'
+  when: "{{ apache_mod_ssl_manage }}"
   notify: Test and Restart Apache

@@ -7,11 +7,24 @@ apache_enabled:
 apache_user:
 apache_group:
 
-# configure.yml
-apache_conf_file_template:
+apache_conf_manage:
+apache_conf_template:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
 
+apache_vhost_manage:
+apache_vhost_template:
+
 # mods/ssl.yml
-apache_package_mod_ssl:
+apache_mod_ssl_manage: True
+apache_mod_ssl_package:
+apache_mod_ssl_template: 'mods/ssl.conf.j2'
+apache_mod_ssl_conf_file: 'ssl.conf'
+
+apache_mod_status_manage: True
+apache_mod_status_template: 'mods/status.conf.j2'
+apache_mod_status_conf_file: 'status.conf'
+apache_mod_status_allow_from:
+  - 127.0.0.1
+  - ::1
