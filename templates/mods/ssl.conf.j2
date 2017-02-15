@@ -1,35 +1,59 @@
 {{ ansible_managed | comment }}
-Listen 443
 LoadModule ssl_module modules/mod_ssl.so
 
 <IfModule mod_ssl.c>
   SSLRandomSeed startup builtin
-  SSLRandomSeed startup file:/dev/urandom 512
+  SSLRandomSeed startup file:/dev/urandom {{ apache_ssl_random_seed_bytes }}
   SSLRandomSeed connect builtin
-  SSLRandomSeed connect file:/dev/urandom 512
+  SSLRandomSeed connect file:/dev/urandom {{ apache_ssl_random_seed_bytes }}
 
   AddType application/x-x509-ca-cert .crt
   AddType application/x-pkcs7-crl    .crl
 
-  SSLPassPhraseDialog builtin
-  SSLSessionCache         shmcb:/var/cache/mod_ssl/scache(512000)
-  SSLSessionCacheTimeout  300
+  SSLPassPhraseDialog {{ apache_ssl_pass_phrase_dialog }}
+  SSLSessionCache "shmcb:{{ apache_session_cache }}"
+  SSLSessionCacheTimeout {{ apache_ssl_sessioncachetimeout }}
   {% if apache_version == '2.4' -%}
-  Mutex default
-  {% else -%}
-  SSLMutex default
+  Mutex {{ apache_ssl_mutex }}
+  {% else  -%}
+  SSLMutex {{ apache_ssl_mutex }}
   {% endif -%}
-  SSLCryptoDevice builtin
-
-#ErrorLog logs/ssl_error_log
-#TransferLog logs/ssl_access_log
-#LogLevel warn
-
-SSLCertificateFile /etc/pki/tls/certs/localhost.crt
-SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
-
-SSLEngine on
-SSLProtocol all -SSLv2 -SSLv3
-SSLCipherSuite DEFAULT:!EXP:!SSLv2:!DES:!IDEA:!SEED:+3DES
-SSLOptions StdEnvVars
+  SSLCryptoDevice {{ apache_ssl_cryptodevice }}
+  SSLHonorCipherOrder On
+  SSLCipherSuite {{ apache_ssl_cipher }}
+  SSLProtocol {{ apache_ssl_protocol }}
+  SSLOptions {{ apache_ssl_options }}
 </IfModule>
+
+
+#<IfModule mod_ssl.c>
+#  SSLRandomSeed startup builtin
+#  SSLRandomSeed startup file:/dev/urandom 512
+#  SSLRandomSeed connect builtin
+#  SSLRandomSeed connect file:/dev/urandom 512
+#
+#  AddType application/x-x509-ca-cert .crt
+#  AddType application/x-pkcs7-crl    .crl
+#
+#  SSLPassPhraseDialog builtin
+#  SSLSessionCache         shmcb:/var/cache/mod_ssl/scache(512000)
+#  SSLSessionCacheTimeout  300
+#  {% if apache_version == '2.4' -%}
+#  Mutex default
+#  {% else -%}
+#  SSLMutex default
+#  {% endif -%}
+#  SSLCryptoDevice builtin
+#
+##ErrorLog logs/ssl_error_log
+##TransferLog logs/ssl_access_log
+##LogLevel warn
+#
+#SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+#SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+#
+#SSLEngine on
+#SSLProtocol all -SSLv2 -SSLv3
+#SSLCipherSuite DEFAULT:!EXP:!SSLv2:!DES:!IDEA:!SEED:+3DES
+#SSLOptions StdEnvVars
+#</IfModule>

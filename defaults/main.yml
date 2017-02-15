@@ -38,6 +38,16 @@ apache_log_level: 'warn'
 apache_sendfile: 'On'
 apache_vhost_include_pattern: '*'
 
+apache_ssl_random_seed_bytes: '512'
+apache_ssl_sessioncachetimeout: '300'
+apache_ssl_pass_phrase_dialog: 'builtin'
+apache_ssl_protocol: 'all -SSLv2 -SSLv3'
+apache_session_cache: '/var/cache/mod_ssl/scache(512000)' ## FIX ME
+apache_ssl_mutex: 'default' ## FIX ME ??
+apache_ssl_cryptodevice: 'builtin'
+apache_ssl_cipher: 'HIGH:MEDIUM:!aNULL:!MD5:!RC4'
+apache_ssl_options: 'StdEnvVars'
+
 apache_vhost_template: vhosts.j2
 apache_vhosts:
   - {
