@@ -18,7 +18,6 @@
   lineinfile:
     line: "Listen {{ item['port'] }}"
     dest: "{{ apache_ports_file }}"
-    delimiter: "### {{ item['server_name'] }} ###"
 
 - name: "Manage VirtualHost {{ item['server_name'] }}"
   template:
