@@ -1,0 +1,31 @@
+---
+- name: Set fact apache_alias_icons_path
+  set_fact:
+    apache_alias_icons_path: "{{ _apache_alias_icons_path }}"
+  when: apache_alias_icons_path is none
+
+# dirty hack
+- name: Set fact apache_alias_icons_path
+  set_fact:
+    apache_alias_icons_path: '/usr/share/httpd/icons'
+  when:
+    - apache_alias_icons_path is none
+    - ansible_distribution_major_version == '7'
+    - ansible_os_family == 'RedHat'
+
+- name: Load alias Apache module
+  include: load.yml
+  with_items:
+    - alias
+
+- name: Configure Apache module alias
+  template:
+    src: "{{ apache_mod_alias_template }}"
+    dest: "{{ apache_mod_dir }}/alias.conf"
+    owner: root
+    group: root
+    setype: httpd_config_t
+    mode: '0644'
+  notify: Test and Restart Apache
+
+

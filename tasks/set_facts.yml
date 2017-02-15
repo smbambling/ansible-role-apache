@@ -88,3 +88,8 @@
   set_fact:
     apache_mod_dir: "{{ _apache_mod_dir }}"
   when: apache_mod_dir is none
+
+- name: Set fact apache_mod_packages
+  set_fact:
+    apache_mod_packages: "{{ _apache_mod_packages }}"
+  when: apache_mod_packages is none

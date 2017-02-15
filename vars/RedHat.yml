@@ -21,4 +21,49 @@ _apache_pidfile: 'run/httpd.pid'
 _apache_logroot: '/var/log/httpd'
 _apache_error_log: 'error_log'
 
-_apache_mod_ssl_package: 'mod_ssl'
+_apache_mod_defaults:
+  - log_config
+  - systemd
+  - unixd
+  - actions
+  - authn_core
+  - cache
+  - ext_filter
+  - mime
+  - mime_magic
+  - rewrite
+  - spelling
+  - suexec
+  - version
+  - vhost_alias
+_apache_mod_packages:
+  auth_cas: 'mod_auth_cas'
+  auth_kerb: 'mod_auth_kerb'
+  auth_mellon: 'mod_auth_mellon'
+  authnz_ldap:
+  fastcgi: 'mod_fastcgi'
+  fcgid: 'mod_fcgid'
+  geoip: 'mod_geoip'
+  ldap:
+  pagespeed: 'mod-pagespeed-stable'
+  passenger: 'mod_passenger'
+  perl: 'mod_perl'
+  php5: 'php'
+  phpXXX: 'php'
+  proxy_html: 'mod_proxy_html'
+  python: 'mod_python'
+  security: 'mod_security'
+  shibboleth: 'shibboleth'
+  ssl: 'mod_ssl'
+  wsgi: 'mod_wsgi'
+  dav_svn: 'mod_dav_svn'
+  suphp: 'mod_suphp'
+  xsendfile: 'mod_xsendfile'
+  nss: 'mod_nss'
+  shib2: 'shibboleth'
+
+_apache_lib_path: 'modules'
+_apache_package_mod_ssl: 'mod_ssl'
+_apache_package_mime_support: 'mailcap'
+_apache_mime_types_config: '/etc/mime.types'
+_apache_alias_icons_path: 'var/www/icons'

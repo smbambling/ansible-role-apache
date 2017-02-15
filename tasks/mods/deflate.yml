@@ -1,0 +1,17 @@
+---
+- name: Load deflate Apache module
+  include: load.yml
+  with_items:
+    - deflate
+
+- name: Configure Apache module deflate
+  template:
+    src: "{{ apache_mod_deflate_template }}"
+    dest: "{{ apache_mod_dir }}/deflate.conf"
+    owner: root
+    group: root
+    setype: httpd_config_t
+    mode: '0644'
+  notify: Test and Restart Apache
+
+

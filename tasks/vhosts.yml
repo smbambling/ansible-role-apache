@@ -1,7 +1,4 @@
 ---
-- debug:
-    var: item
-
 - name: "Set VirtualHost filename for {{ item['server_name'] }}"
   set_fact:
     apache_vhost_filename: "{{ item['server_name'] }}_ssl.conf"

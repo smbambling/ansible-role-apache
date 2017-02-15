@@ -30,14 +30,6 @@
       #
   changed_when: false
 
-- name: Create Apache Modules Directory
-  file:
-    path: "{{ apache_mod_dir }}"
-    owner: root
-    group: root
-    mode: '0755'
-    state: directory
-
 # This task is after the install task meaning
 # the package ought to create them and not ansible
 - name: Manage apache group
@@ -85,13 +77,8 @@
 
 ########### Look at manageing apache_confd_dir
 
-- name: Manage mod_ssl
-  include: mods/ssl.yml
-  when: apache_mod_ssl_manage
-
-- name: Manage mod_status
-  include: mods/status.yml
-  when: apache_mod_status_manage
+- name: Include Apache modules tasks
+  include: mods.yml
 
 - name: Manage VirtualHosts
   include: vhosts.yml

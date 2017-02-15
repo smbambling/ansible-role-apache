@@ -1,0 +1,82 @@
+---
+- name: Set fact apache_lib_path
+  set_fact:
+    apache_lib_path: "{{ _apache_lib_path }}"
+  when: apache_lib_path is none
+
+- name: Create Apache Modules Directory
+  file:
+    path: "{{ apache_mod_dir }}"
+    owner: root
+    group: root
+    mode: '0755'
+    state: directory
+
+- name: Load default Apache modules
+  include: mods/load.yml
+  with_items:
+    - actions
+    - auth_basic
+    - auth_digest
+    - authn_anon
+    - authn_dbm
+    - authn_file
+    - authz_dbm
+    - authz_groupfile
+    - authz_host
+    - authz_owner
+    - authz_user
+    - cache
+    - cgi
+    - dav
+    - env
+    - expires
+    - ext_filter
+    - filter
+    - headers
+    - include
+    - log_config
+    - logio
+    - negotiation
+    - proxy
+    - proxy_http
+    - rewrite
+    - speling
+    - substitute
+    - suexec
+    - usertrack
+    - version
+    - vhost_alias
+
+- name: Load default Apache modules for systemd
+  include: mods/load.yml
+  with_items:
+    - systemd
+  when: ansible_service_mgr  == 'systemd'
+
+- name: Load default Apache 2.4 modules
+  include: mods/load.yml
+  with_items:
+    - access_compat
+    - authn_core
+    - authz_core
+    - unixd
+    - authn_alias
+    - authn_default
+    - authz_default
+  when: apache_version == '2.4'
+
+- include: mods/deflate.yml
+- include: mods/mime.yml
+- include: mods/mime_magic.yml
+- include: mods/setenvif.yml
+- include: mods/autoindex.yml
+- include: mods/alias.yml
+
+- name: Manage Apache module mod_ssl
+  include: mods/ssl.yml
+  when: apache_mod_ssl_manage
+
+- name: Manage Apache module mod_status
+  include: mods/status.yml
+  when: apache_mod_status_manage

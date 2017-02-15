@@ -1,0 +1,32 @@
+---
+- name: Set fact apache_package_mime_support
+  set_fact:
+    apache_package_mime_support: "{{ _apache_package_mime_support }}"
+  when: apache_package_mime_support is none
+
+- name: Set fact apache_mime_types_config
+  set_fact:
+    apache_mime_types_config: "{{ _apache_mime_types_config }}"
+  when: apache_mime_types_config is none
+
+- name: Install Apache mime support package
+  package:
+    name: "{{ apache_package_mime_support }}"
+    state: present
+
+- name: Load mime Apache module
+  include: load.yml
+  with_items:
+    - mime
+
+- name: Configure Apache module mime
+  template:
+    src: "{{ apache_mod_mime_template }}"
+    dest: "{{ apache_mod_dir }}/mime.conf"
+    owner: root
+    group: root
+    setype: httpd_config_t
+    mode: '0644'
+  notify: Test and Restart Apache
+
+

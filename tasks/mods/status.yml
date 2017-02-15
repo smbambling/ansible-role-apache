@@ -2,7 +2,7 @@
 - name: Configure Apache module status
   template:
     src: "{{ apache_mod_status_template }}"
-    dest: "{{apache_confd_dir }}/{{ apache_mod_status_conf_file }}"
+    dest: "{{ apache_mod_dir }}/{{ apache_mod_status_conf_file }}"
     owner: root
     group: root
     setype: httpd_config_t

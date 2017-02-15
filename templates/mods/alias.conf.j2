@@ -1,0 +1,15 @@
+{{ ansible_managed | comment }}
+<IfModule alias_module>
+Alias /icons/ "{{ apache_alias_icons_path }}/"
+<Directory "{{ apache_alias_icons_path }}">
+    Options Indexes MultiViews
+    AllowOverride None
+{% if apache_version == '2.4' -%}
+    Require all granted
+{% else -%}
+     Order allow,deny
+     Allow from all
+{% endif -%}
+</Directory>
+</IfModule>
+

@@ -48,6 +48,8 @@ apache_ssl_cryptodevice: 'builtin'
 apache_ssl_cipher: 'HIGH:MEDIUM:!aNULL:!MD5:!RC4'
 apache_ssl_options: 'StdEnvVars'
 
+apache_mod_packages:
+
 apache_vhost_template: vhosts.j2
 apache_vhosts:
   - {
@@ -69,11 +71,33 @@ apache_vhosts:
       ],
     }
 
+apache_lib_path:
+
+# mods/mime.yml
+apache_package_mime_support:
+apache_mime_types_config:
+apache_mod_mime_template: 'mods/mime.conf.j2'
+
+# mods/mime_magic.yml
+apache_mod_mime_magic_template: 'mods/mime_magic.conf.j2'
+
+# mods/deflate.yml
+apache_mod_deflate_template: 'mods/deflate.conf.j2'
+
+# mods/setenvif.yml
+apache_mod_setenvif_template: 'mods/setenvif.conf.j2'
+
+# mods/autoindex.yml
+apache_mod_autoindex_template: 'mods/autoindex.conf.j2'
+
 # mods/ssl.yml
 apache_mod_ssl_manage: True
-apache_mod_ssl_package:
+apache_package_mod_ssl:
 apache_mod_ssl_template: 'mods/ssl.conf.j2'
-apache_mod_ssl_conf_file: 'ssl.conf'
+
+# mods/alias.yml
+apache_mod_alias_template: 'mods/alias.conf.j2'
+apache_alias_icons_path:
 
 apache_mod_status_manage: True
 apache_mod_status_template: 'mods/status.conf.j2'
