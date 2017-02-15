@@ -17,5 +17,3 @@
     setype: httpd_config_t
     mode: '0644'
   notify: Test and Restart Apache
-
-
