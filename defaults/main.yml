@@ -56,7 +56,8 @@ apache_vhosts:
       template: 'vhosts.j2',
       server_name: "{{ ansible_fqdn }}",
       port: '80',
-      ip: "{{ ansible_default_ipv4['address'] }}",
+      #ip: "{{ ansible_default_ipv4['address'] }}",
+      ip: '127.0.0.1',
       ssl: False,
       docroot: '/var/www/html',
       aliases: [
