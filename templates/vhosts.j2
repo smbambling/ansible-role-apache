@@ -19,4 +19,9 @@
 {% include "vhost/aliases.j2" %}
 {% endif %}
 
+{% if item['custom_fragment'] is defined %}
+# Custom Fragment
+{{ item['custom_fragment'] }}
+{% endif %}
+
 </VirtualHost>

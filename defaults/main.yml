@@ -69,6 +69,7 @@ apache_vhosts:
           path: 'baz'
         },
       ],
+      custom_fragment: "#Test"
     }
 
 apache_lib_path:
