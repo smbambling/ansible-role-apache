@@ -1,0 +1,22 @@
+{{ ansible_managed | comment }}
+
+<VirtualHost *:{{ item['port'] }}>
+{% if item['server_name'] is defined %}
+  ServerName {{ item['server_name'] }}
+{% endif %}
+{% if item['server_admin'] is defined %}
+  ServerAdmin {{ item['server_admin'] }}
+{% endif %}
+
+  ## Vhost docroot
+{% if item['virtual_docroot'] is defined %}
+  VirtualDocumentRoot "{{ item['virtual_docroot'] }}"
+{% elif item['docroot'] is defined %}
+  DocumentRoot "{{ item['docroot'] }}"
+{% endif %}
+
+{% if item['aliases'] and item['aliases'] | length > 0 %}
+{% include "vhost/aliases.j2" %}
+{% endif %}
+
+</VirtualHost>

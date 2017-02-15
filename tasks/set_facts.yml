@@ -34,6 +34,11 @@
     apache_conf_template: "{{ _apache_conf_template }}"
   when: apache_conf_template is none
 
+- name: Set fact apache_server_root
+  set_fact:
+    apache_server_root: "{{ _apache_server_root }}"
+  when: apache_server_root is none
+
 - name: Set fact apache_conf_file
   set_fact:
     apache_conf_file: "{{ _apache_conf_file }}"
@@ -44,6 +49,11 @@
     apache_conf_dir: "{{ _apache_conf_dir }}"
   when: apache_conf_dir is none
 
+- name: Set fact apache_vhost_dir
+  set_fact:
+    apache_vhost_dir: "{{ _apache_vhost_dir }}"
+  when: apache_vhost_dir is none
+
 - name: Set fact apache_confd_dir
   set_fact:
     apache_confd_dir: "{{ _apache_confd_dir }}"
@@ -53,3 +63,28 @@
   set_fact:
     apache_conf_manage: "{{ _apache_conf_manage }}"
   when: apache_conf_manage is none
+
+- name: Set fact apache_pidfile
+  set_fact:
+    apache_pidfile: "{{ _apache_pidfile }}"
+  when: apache_pidfile is none
+
+- name: Set fact apache_error_log
+  set_fact:
+    apache_error_log: "{{ _apache_error_log }}"
+  when: apache_error_log is none
+
+- name: Set fact apache_logroot
+  set_fact:
+    apache_logroot: "{{ _apache_logroot }}"
+  when: apache_logroot is none
+
+- name: Set fact apache_httpd_dir
+  set_fact:
+    apache_httpd_dir: "{{ _apache_httpd_dir }}"
+  when: apache_httpd_dir is none
+
+- name: Set fact apache_mod_dir
+  set_fact:
+    apache_mod_dir: "{{ _apache_mod_dir }}"
+  when: apache_mod_dir is none

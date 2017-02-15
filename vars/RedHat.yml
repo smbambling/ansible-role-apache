@@ -9,8 +9,16 @@ _apache_state: 'started'
 _apache_enabled: 'yes'
 _apache_conf_manage: True
 _apache_conf_template: 'httpd.conf.j2'
+_apache_httpd_dir: '/etc/httpd'
+_apache_server_root: '/etc/httpd'
 _apache_conf_file: 'httpd.conf'
 _apache_conf_dir: '/etc/httpd/conf'
 _apache_confd_dir: '/etc/httpd/conf.d'
+_apache_mod_dir: "{{ _apache_httpd_dir }}/conf.modules.d"
+_apache_vhost_dir: "{{ _apache_httpd_dir }}/conf.d"
+
+_apache_pidfile: 'run/httpd.pid'
+_apache_logroot: '/var/log/httpd'
+_apache_error_log: 'error_log'
 
 _apache_mod_ssl_package: 'mod_ssl'

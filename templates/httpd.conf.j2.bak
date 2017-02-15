@@ -4,31 +4,31 @@
 # configuration directives that give the server its instructions.
 
 # Security
-ServerTokens {{ httpd_ServerTokens }}
-ServerSignature {{ httpd_server_signature }}
-TraceEnable {{ httpd_trace_enable }}
+ServerTokens {{ apache_ServerTokens }}
+ServerSignature {{ apache_server_signature }}
+TraceEnable {{ apache_trace_enable }}
 
 ## General configuration
-ServerName {{ httpd_ServerName }}
-ServerRoot {{ httpd_ServerRoot }}
-PidFile {{ httpd_PidFile }}
-Timeout {{ httpd_Timeout }}
-KeepAlive {{ httpd_KeepAlive }}
-MaxKeepAlRveRequests {{ httpd_MaxKeepAliveRequests }}
+ServerName {{ apache_ServerName }}
+ServerRoot {{ apache_ServerRoot }}
+PidFile {{ apache_PidFile }}
+Timeout {{ apache_Timeout }}
+KeepAlive {{ apache_KeepAlive }}
+MaxKeepAlRveRequests {{ apache_MaxKeepAliveRequests }}
 
 User {{ apache_user }}
 Group {{ apache_group }}
 
-Listen {{ httpd_Listen }}
+Listen {{ apache_Listen }}
 
 Include "/etc/httpd/conf.modules.d/*.load"
 Include "/etc/httpd/conf.modules.d/*.conf"
 OptionalInclude conf.modules.d/*.conf
 
 ## 'Main' server configuration
-ServerAdmin {{ httpd_ServerAdmin }}
-{% if httpd_ServerName is defined %}
-ServerName {{ httpd_ServerName }}
+ServerAdmin {{ apache_ServerAdmin }}
+{% if apache_ServerName is defined %}
+ServerName {{ apache_ServerName }}
 {% endif %}
 
 
@@ -38,7 +38,7 @@ ServerName {{ httpd_ServerName }}
     Require all denied
 </Directory>
 
-DocumentRoot {{ httpd_DocumentRoot }}
+DocumentRoot {{ apache_DocumentRoot }}
 
 # Relax access in /var/www
 <Directory "/var/www">
@@ -47,7 +47,7 @@ DocumentRoot {{ httpd_DocumentRoot }}
 </Directory>
 
 # Further relax access to the default document root:
-<Directory "{{ httpd_DocumentRoot }}">
+<Directory "{{ apache_DocumentRoot }}">
     Options Indexes FollowSymLinks
     AllowOverride None
     Require all granted
@@ -64,8 +64,8 @@ DocumentRoot {{ httpd_DocumentRoot }}
 </Files>
 
 # Logging
-ErrorLog "{{ httpd_ErrorLog }}"
-LogLevel {{ httpd_LogLevel }}
+ErrorLog "{{ apache_ErrorLog }}"
+LogLevel {{ apache_LogLevel }}
 
 <IfModule log_config_module>
     LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
@@ -76,7 +76,7 @@ LogLevel {{ httpd_LogLevel }}
       LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
     </IfModule>
 
-    CustomLog "{{ httpd_AccessLog }}" combined
+    CustomLog "{{ apache_AccessLog }}" combined
 </IfModule>
 
 # CGI

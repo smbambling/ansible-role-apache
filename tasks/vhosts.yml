@@ -1,0 +1,34 @@
+---
+- debug:
+    var: item
+
+- name: "Set VirtualHost filename for {{ item['server_name'] }}"
+  set_fact:
+    apache_vhost_filename: "{{ item['server_name'] }}_ssl.conf"
+  when: item['ssl']
+
+- name: "Set VirtualHost filename for {{ item['server_name'] }}"
+  set_fact:
+    apache_vhost_filename: "{{ item['server_name'] }}_non_ssl.conf"
+  when: not item['ssl']
+
+- name: "Set VirtualHost template for {{ item['server_name'] }}"
+  set_fact:
+    apache_vhosts_template: "{{ item['template'] }}"
+  when: item['template'] is defined
+
+- name: "Set VirtualHost listen port for {{ item['server_name'] }}"
+  lineinfile:
+    line: "Listen {{ item['port'] }}"
+    dest: "{{ apache_ports_file }}"
+    delimiter: "### {{ item['server_name'] }} ###"
+
+- name: "Manage VirtualHost {{ item['server_name'] }}"
+  template:
+    src: "{{ apache_vhosts_template }}"
+    dest: "{{ apache_confd_dir }}/{{ apache_vhost_filename }}"
+    owner: root
+    group: root
+    setype: httpd_config_t
+    mode: '0644'
+  notify: Test and Restart Apache

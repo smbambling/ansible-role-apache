@@ -1,17 +1,77 @@
 {{ ansible_managed | comment }}
-ServerTokens OS
 
-ServerRoot "/etc/httpd"
+# Security
+ServerTokens {{ apache_server_tokens }}
+ServerSignature {{ apache_server_signature }}
+TraceEnable {{ apache_trace_enable }}
 
-PidFile run/httpd.pid
+ServerName {{ apache_server_name }}
+ServerRoot {{ apache_server_root }}
+PidFile {{ apache_pidfile }}
+Timeout {{ apache_timeout }}
+KeepAlive {{ apache_keepalive }}
+MaxKeepAliveRequests {{ apache_max_keepalive_requests }}
+KeepAliveTimeout {{ apache_keepalive_timeout }}
+LimitRequestFieldSize {{ apache_limitreqfieldsize }}
 
-Timeout 60
+User {{ apache_user }}
+Group {{ apache_group }}
 
-KeepAlive Off
+AccessFileName .htaccess
+<FilesMatch "^\.ht">
+{% if apache_version == '2.4' -%}
+  Require all denied
+{% else -%}
+  Order allow,deny
+  Deny from all
+  Satisfy all
+{% endif -%}
+</FilesMatch>
 
-MaxKeepAliveRequests 100
+<Directory />
+  Options {{ apache_root_directory_options }}
+  AllowOverride None
+  {% if root_directory_secured -%}
+    {% if apache_version == '2.4' -%}
+  Require all denied
+    {% else -%}
+  Order deny,allow
+  Deny from all
+    {% endif -%}
+  {% endif -%}
+</Directory>
 
-KeepAliveTimeout 15
+{% if apache_version == '2.2' -%}
+DefaultType {{ apache_default_type }}·
+{% endif %}
+HostnameLookups Off
+{% if apache_error_log | match("^[|\/]") or apache_error_log | match ("^syslog:")  -%}
+ErrorLog "{{ apache_error_log }}"
+{% else -%}
+ErrorLog "{{ apache_logroot }}/{{ apache_error_log }}"
+{% endif -%}
+LogLevel {{ apache_log_level }}
+EnableSendfile {{ apache_sendfile }}
+
+Include "{{ apache_mod_dir }}/*.load"
+Include "{{ apache_mod_dir }}/*.conf"
+Include "{{ apache_ports_file }}"
+{% if apache_version == '2.2' -%}
+IncludeOptional "{{ apache_vhost_dir }}/*.conf"
+{% else %}
+Include "{{ apache_vhost_dir }}/*.conf"
+{% endif %}
+{% if apache_vhost_dir != apache_confd_dir -%}
+  {% if apache_version == '2.2' -%}
+IncludeOptional "{{ apache_vhost_dir }}/*.conf"
+  {% else %}
+Include "{{ apache_vhost_dir }}/*.conf"
+  {% endif %}
+{% endif %}
+
+
+
+
 
 <IfModule prefork.c>
 StartServers       8
@@ -31,7 +91,6 @@ ThreadsPerChild     25
 MaxRequestsPerChild  0
 </IfModule>
 
-Listen 80
 
 LoadModule auth_basic_module modules/mod_auth_basic.so
 LoadModule auth_digest_module modules/mod_auth_digest.so
@@ -86,10 +145,6 @@ LoadModule disk_cache_module modules/mod_disk_cache.so
 LoadModule cgi_module modules/mod_cgi.so
 LoadModule version_module modules/mod_version.so
 
-Include conf.d/*.conf
-
-User apache
-Group apache
 
 ServerAdmin root@localhost
 
@@ -97,54 +152,23 @@ UseCanonicalName Off
 
 DocumentRoot "/var/www/html"
 
-<Directory />
-    Options FollowSymLinks
-    AllowOverride None
-</Directory>
-
-<Directory "/var/www/html">
-    Options Indexes FollowSymLinks
-    AllowOverride None
-    Order allow,deny
-    Allow from all
-</Directory>
-
 <IfModule mod_userdir.c>
     UserDir disabled
 </IfModule>
 
 DirectoryIndex index.html index.html.var
 
-AccessFileName .htaccess
-
-<Files ~ "^\.ht">
-    Order allow,deny
-    Deny from all
-    Satisfy All
-</Files>
 
 TypesConfig /etc/mime.types
 
-DefaultType text/plain
 
 <IfModule mod_mime_magic.c>
     MIMEMagicFile conf/magic
 </IfModule>
 
-HostnameLookups Off
-
-ErrorLog logs/error_log
-
-LogLevel warn
-
-LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
-LogFormat "%h %l %u %t \"%r\" %>s %b" common
-LogFormat "%{Referer}i -> %U" referer
-LogFormat "%{User-agent}i" agent
 
 CustomLog logs/access_log combined
 
-ServerSignature On
 
 Alias /icons/ "/var/www/icons/"
 
@@ -237,8 +261,6 @@ AddLanguage zh-TW .zh-tw
 LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW
 
 ForceLanguagePriority Prefer Fallback
-
-AddDefaultCharset UTF-8
 
 AddType application/x-compress .Z
 AddType application/x-gzip .gz .tgz

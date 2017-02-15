@@ -9,12 +9,55 @@ apache_group:
 
 apache_conf_manage:
 apache_conf_template:
+apache_httpd_dir:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
+apache_mod_dir:
+apache_vhost_dir:
+apache_ports_file: "{{ apache_conf_dir }}/ports.conf"
 
-apache_vhost_manage:
-apache_vhost_template:
+apache_server_tokens: OS
+apache_server_signature: 'On'
+apache_trace_enable: 'On'
+apache_server_name: "{{ ansible_fqdn }}"
+apache_server_root:
+apache_pidfile:
+apache_timeout: '120'
+apache_keepalive: Off
+apache_max_keepalive_requests: 100
+apache_keepalive_timeout: '15'
+apache_limitreqfieldsize: '8190'
+root_directory_secured: False
+apache_root_directory_options: 'FollowSymLinks'
+apache_root_directory_secured: False
+apache_default_type: 'text/plain'
+apache_logroot:
+apache_error_log:
+apache_log_level: 'warn'
+apache_sendfile: 'On'
+apache_vhost_include_pattern: '*'
+
+apache_vhost_template: vhosts.j2
+apache_vhosts:
+  - {
+      template: 'vhosts.j2',
+      server_name: "{{ ansible_fqdn }}",
+      port: '80',
+      ip: "{{ ansible_default_ipv4['address'] }}",
+      ssl: False,
+      docroot: '/var/www/html',
+      aliases: [
+        {
+          aliasmatch: 'steve',
+          path: 'bambling'
+        },
+          {
+          alias: 'blah',
+          path: 'baz'
+        },
+      ],
+    }
 
 # mods/ssl.yml
 apache_mod_ssl_manage: True
