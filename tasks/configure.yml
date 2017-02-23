@@ -58,7 +58,7 @@
 
 - name: "Remove default VirtualHost entry from ssl.conf"
   replace:
-    dest: '/etc/httpd/conf.d/ssl.conf'
+    dest: "{{ apache_confd_dir }}/ssl.conf"
     regexp: '<VirtualHost.*>[\w\W]*?<\/VirtualHost>'
   notify: Test and Restart Apache
 
