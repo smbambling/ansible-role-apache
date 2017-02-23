@@ -1,5 +1,17 @@
-  ## Directories, there should at least be a declaration for {{ item['docroot'] }}
-{% for dir_statement in item['directories'] %}
+  ## Directories
+{# Directories, there should at least be a declaration for {{ item['docroot'] }} #}
+{% if item['directories'] is defined  and item['directories'] | length > 0 -%}
+  {% set directories = item['directories'] -%}
+{% else %}
+  {% set directories = [
+    {
+      'provider': 'directory',
+      'path': item['docroot'],
+      'options': ['Indexes','FollowSymLinks','MultiViews'],
+    },
+  ] -%}
+{% endif -%}
+{% for dir_statement in directories %}
   <{{ dir_statement['provider'] | capitalize}} {{ dir_statement['path'] }}>
   {% if dir_statement['header'] is defined and dir_statement['header'] | length > 0 %}
     {% for header in dir_statement['header'] %}
@@ -67,5 +79,5 @@
     Satisfy {{ dir_statement['satisfy'] }}
     {% endif %}
   {% endif %}
-  </{{ dir_statement['provider'] | capitalize}}>
+  </{{ dir_statement['provider'] | capitalize }}>
 {% endfor %}

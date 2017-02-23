@@ -54,6 +54,7 @@ apache_vhosts:
       - provider: 'directory'
         header:
           - 'echo ^TS'
+          - 'echo foo'
         path: '/usr/local/mailman/cgi-bin/'
         options:
           - 'MultiViews'

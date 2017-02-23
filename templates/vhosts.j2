@@ -34,9 +34,7 @@
   AllowEncodedSlashes item['allow_encoded_slashes']
 {% endif %}
 
-{% if item['directories'] is defined and item['directories'] | length > 0 %}
 {% include "vhost/directories.j2" %}
-{% endif %}
 
 {% if item['additional_includes'] is defined and item['additional_includes'] | length > 0 %}
 {% include "vhost/additional_includes.j2" %}
