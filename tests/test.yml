@@ -3,3 +3,39 @@
 
   roles:
     - role: ansible-role-apache
+      apache_vhosts:
+        # Non-SSL VHOST
+        - server_name: 'localhost'
+          serveraliases:
+            - foo
+            - bar
+          port: 80
+          ssl: False
+          docroot: '/var/www/html'
+          aliases:
+            - aliasmatch: 'steve'
+              path: 'bambling'
+            - alias: 'blah'
+              path: 'baz'
+            - scriptalias: 'f/mailman/'
+              path: '/usr/local/mailman/cgi-bin/'
+          redirects:
+            - redirect: '/index.hmtl'
+              destination: 'http://www.arin.net/'
+            - redirect: '/foo.html'
+              destination: 'http://www.google.com'
+          headers:
+            - 'echo ^TS'
+          directories:
+            - provider: 'directory'
+              header:
+                - 'echo ^TS'
+                - 'echo foo'
+              path: '/usr/local/mailman/cgi-bin/'
+              options:
+                - 'MultiViews'
+                - 'FollowSymLinks'
+          custom_fragment: '#foobar'
+          # SSL VHOST
+        - server_name: 'localhost'
+          docroot: '/var/www/html'
