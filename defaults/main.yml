@@ -25,3 +25,5 @@ apache_vhosts_template: vhosts.j2
 apache_vhost_ip: '*'
 apache_vhost_port: '443'
 apache_vhost_ssl: True
+
+apache_vhosts: []
