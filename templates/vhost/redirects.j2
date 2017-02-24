@@ -1,4 +1,4 @@
-  ## RedirectMatch rules:w
+  ## RedirectMatch rules
 {% for redirect_statement in item['redirects'] %}
   {% if redirect_statement['redirect'] is defined and redirect_statement['redirect'] != '' %}
   Redirect {{ redirect_statement['status'] | default('') }} "{{ redirect_statement['redirect'] }}" "{{ redirect_statement['destination'] }}"

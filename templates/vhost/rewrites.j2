@@ -4,7 +4,7 @@
   RewriteOptions Inherit
 {% endif %}
 
-{% for rewrite_statement in items['rewrites'] %}
+{% for rewrite_statement in item['rewrites'] %}
   {% if rewrite_statement['comment'] %}
   ## {{ rewrite_statement['comment'] }}
   {% endif %}
@@ -26,3 +26,4 @@
   RewriteRule {{ rewrite_rule }}
     {% endfor %}
   {% endif %}
+{% endfor %}

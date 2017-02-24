@@ -26,4 +26,18 @@ apache_vhost_ip: '*'
 apache_vhost_port: '443'
 apache_vhost_ssl: True
 
-apache_vhosts: []
+apache_vhosts:
+  - server_name: 'localhost'
+    docroot: '/var/www/html'
+    port: '80'
+    ssl: False
+    rewrites:
+      - comment: "Don't Re-write /server-status or /server-info"
+        rewrite_cond:
+          - '%{REQUEST_URI} !=/server-info'
+          - '%{REQUEST_URI} !=/server-status'
+        rewrite_rule:
+          - "^(.*)$ https://127.0.0.1/ [R=301,L]"
+  - server_name: 'localhost'
+    docroot: '/var/www/html'
+    ssl: True
