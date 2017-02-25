@@ -27,7 +27,7 @@ apache_vhost_port: '443'
 apache_vhost_ssl: True
 
 apache_vhosts:
-  - server_name: 'localhost'
+  - server_name: "{{ ansible_fqdn }}
     docroot: '/var/www/html'
     port: '80'
     ssl: False
@@ -37,7 +37,7 @@ apache_vhosts:
           - '%{REQUEST_URI} !=/server-info'
           - '%{REQUEST_URI} !=/server-status'
         rewrite_rule:
-          - "^(.*)$ https://127.0.0.1/ [R=301,L]"
-  - server_name: 'localhost'
+          - "^(.*)$ https://{{ ansible_fqdn }} [R=301,L]"
+  - server_name: "{{ ansible_fqdn }}"
     docroot: '/var/www/html'
     ssl: True
