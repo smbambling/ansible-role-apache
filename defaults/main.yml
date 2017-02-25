@@ -27,7 +27,7 @@ apache_vhost_port: '443'
 apache_vhost_ssl: True
 
 apache_vhosts:
-  - server_name: "{{ ansible_fqdn }}
+  - server_name: "{{ ansible_fqdn }}"
     docroot: '/var/www/html'
     port: '80'
     ssl: False
