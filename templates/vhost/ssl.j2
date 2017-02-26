@@ -6,7 +6,7 @@
   SSLCertificateChainFile "{{ item['ssl_chain'] }}"
 {% endif %}
 {% if item['ssl_certs_dir'] | default(apache_ssl_certs_dir) is defined %}
-  SSLCACertificatePath {{ item['ssl_certs_dir'] | default(apache_ssl_certs_dir) }}
+  SSLCACertificatePath "{{ item['ssl_certs_dir'] | default(apache_ssl_certs_dir) }}"
 {% endif %}
 {% if item['ssl_ca'] is defined and item['ssl_ca'] != '' %}
   SSLCACertificateFile "{{ item['ssl_ca'] }}"
