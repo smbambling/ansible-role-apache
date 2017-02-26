@@ -1,7 +1,7 @@
 #jinja2: trim_blocks: "true", lstrip_blocks: "false"
 {{ ansible_managed | comment }}
 
-<VirtualHost {{ item['ip'] | default (apache_vhost_ip) | join(" ") }}:{{ item['port'] | default(apache_vhost_port) }}>
+<VirtualHost {{ item['ip'] | default (apache_vhost_ip) }}:{{ item['port'] | default(apache_vhost_port) }}>
 {% if item['server_name'] is defined %}
   ServerName {{ item['server_name'] }}
 {% endif %}
