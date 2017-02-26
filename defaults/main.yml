@@ -11,7 +11,7 @@ apache_httpd_dir:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
-apache_httpd_dir:
+apache_mod_dir:
 apache_log_dir:
 apache_vhost_dir:
 apache_ports_file: "{{ apache_conf_dir }}/ports.conf"
