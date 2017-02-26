@@ -1,0 +1,4 @@
+---
+- name: Manage Apache module mod_status
+  include: mods/status.yml
+  when: apache_mod_status_manage

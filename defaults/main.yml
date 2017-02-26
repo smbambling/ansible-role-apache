@@ -11,16 +11,23 @@ apache_httpd_dir:
 apache_conf_file:
 apache_conf_dir:
 apache_confd_dir:
+apache_httpd_dir:
 apache_log_dir:
 apache_vhost_dir:
 apache_ports_file: "{{ apache_conf_dir }}/ports.conf"
+
+# Mod_Status Defaults
+apache_mod_status_manage: True
+apache_mod_status_allow_from:
+  - 127.0.0.1
+  - ::1
+
+# VirtualHost Defaults
 
 apache_ssl_certs_dir:
 apache_ssl_default_cert:
 apache_ssl_default_key:
 
-
-# VirtualHost Defaults
 apache_vhosts_template: vhosts.j2
 apache_vhost_ip: '*'
 apache_vhost_port: '443'
