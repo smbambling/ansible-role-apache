@@ -41,7 +41,7 @@
     {% endif %}
   {% endif %}
   {% if apache_version == '2.4' %}
-    {# TODO: Allow for Additional Require Directives:
+    {# TODO: Allow for Additional Directory Directives:
     https://httpd.apache.org/docs/2.4/mod/mod_authz_core.html#requireall #}
     {% if dir_statement['require'] is defined and dir_statement['require'] | length > 0 %}
       {% for require in dir_statement['require'] %}
