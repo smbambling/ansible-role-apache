@@ -95,7 +95,7 @@ The template used for generating VirtualHost configurations. This can be used to
  ```yaml
  apache_vhost_ssl: True
  ```
-Enables SSL for the virtual host. SSL virtual hosts only respond to HTTPS queries.  Defaults to True, SSL should be used everywhere!! Overridden inside the `apache_vhosts` variable on a per Virtualhost basis within the dict.
+Enables/Disables SSL for the virtual host. SSL virtual hosts only respond to HTTPS queries.  Defaults to True, SSL should be used everywhere!! Overridden inside the `apache_vhosts` variable on a per Virtualhost basis within the dict.
 
 ```yaml
 apache_ssl_certs_dir:
@@ -126,15 +126,70 @@ Port the Virtualhost is configured to listen on.  Defaults to 443. Overridden in
 
 ```yaml
 apache_vhosts:
-  - server_name: 
+  - server_name: 'site.example.com'
 ```
-Sets the Apache server name via Apache's ServerName directive.
+Sets the servername corresponding to the hostname you connect to the Virtualhost at. Sets the Apache ServerName directive. Default: undef
 
 ```yaml
 apache_vhosts:
-  - docroot:
+  - serveraliases:
+      - 'site.example.org'
+      - 'site.example.net'
 ```
-Sets the default DocumentRoot location for a VritualHost.
+List of server aliases for the Virtualhost. Sets the ServerAlias Directive. Default: undef
+
+```yaml
+apache_vhosts:
+  - server_admin 'admin@example.com'
+```
+Specifies the email address Apache displays when it renders one of its error pages. Default: undef
+
+```yaml
+apache_vhosts:
+  - virtual_docroot: '/var/www/%-2+'
+```
+Sets the VirtualDocumentRoot directive to allow you to determine where Apache HTTP Server will find your documents based on the value of the server name. Default: undef
+
+```yaml
+apache_vhosts:
+  - docroot: '/var/www/html'
+```
+Sets the default DocumentRoot location for a VritualHost.  Default: undef
+
+```yaml
+apache_vhosts:
+  - aliases:
+      - alias: '/image'
+        path: '/ftp/pub/image'
+      - aliasmatch: '^/image/(.*)\.jpg$'
+        path: '/files/jpg.images/$1.jpg'
+      - scriptalias: '/nagios/cgi-bin/'
+        path: '/usr/lib/nagios/cgi-bin/'
+      - scriptaliasmatch: '^/cgi-bin(.*)'
+        path: '/usr/local/share/cgi-bin$1'
+```
+
+A list of hashes to create **Alias**, **AliasMatch**, **ScriptAlias** or **ScriptAliasMatch** directives. Default: undef
+
+```yaml
+apache_vhosts:
+  - fallbackresource: '/index.php'
+```
+Sets the FallbackResource directive, which specifies an action to take for any URL that doesn't map to anything in your filesystem and would otherwise return 'HTTP 404 (Not Found)'. Valid options must either begin with a '/' or be 'disabled'. Default: undef
+
+```yaml
+apache_vhosts:
+  - port: 80
+```
+Overrides the port the Virtualhost is configured to listen.  Default: See `apache_vhost_port`
+
+```yaml
+apache_vhosts:
+  - ssl: False
+```
+Enables/Disables SSL for the virtual host. SSL virtual hosts only respond to HTTPS queries. Default: See `apache_vhost_ssl`
+
+
 
 Dependencies
 ------------
@@ -142,6 +197,53 @@ None
 
 Example Playbook(s)
 -------------------
+
+1. Use Virtualhost default configurations from `defaults/main.yml`
+
+  ```yaml
+  ---
+  roles:
+    - role: ansible-role-apache
+  ```
+
+1. Set custom Virtualhost entries via Playbook variables
+
+  ```yaml
+  ---
+  vars:
+    apache_vhosts:
+      - server_name: site.example.com
+        serveraliases:
+          - site.example.org
+          - site.example.net
+        port: 80
+        ssl: False
+        docroot: '/var/www/site_com'
+
+  roles:
+    - role: ansible-role-apache
+  ```
+
+1. Set custom entries via [Group Variables](http://docs.ansible.com/ansible/intro_inventory.html#group-variables)
+  
+  ```yaml
+  group_vars/web1.example.dev/apache.yml
+  
+  ---
+  apache_vhosts:
+      - server_name: site.example.com
+        serveraliases:
+          - site.example.org
+          - site.example.net
+        port: 80
+        ssl: False
+        docroot: '/var/www/site_com'
+  ```
+  ```yaml
+  ---
+  roles:
+    - role: ansible-role-apache
+  ```
 
 Development / Contributing
 --------------------------
