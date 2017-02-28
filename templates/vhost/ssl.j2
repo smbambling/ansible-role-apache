@@ -20,15 +20,9 @@
 {% if item['ssl_crl_check'] is defined and item['ssl_crl_check'] != '' and apache_version == '2.4' %}
   SSLCARevocationCheck "{{ item['ssl_crl_check'] }}"
 {% endif %}
-{% if item['ssl_protocol'] is defined and item['ssl_protocol'] != '' %}
-  SSLProtocol "{{ item['ssl_protocol'] }}"
-{% endif %}
-{% if item['ssl_cipher'] is defined and item['ssl_cipher'] != '' %}
-  SSLCipherSuite "{{ item['ssl_cipher'] }}"
-{% endif %}
-{% if item['ssl_honorcipherorder'] is defined and item['ssl_honorcipherorder'] != '' %}
-  SSLHonorCipherOrder "{{ item['ssl_honorcipherorder'] }}"
-{% endif %}
+  SSLHonorCipherOrder "{{ item['ssl_honorcipherorder'] | default(apache_ssl_honorcipherorder) }}"
+  SSLProtocol "{{ item['ssl_protocol'] | default(apache_ssl_protocol) }}"
+  SSLCipherSuite "{{ item['ssl_cipher'] | default(apache_ssl_ciphersuite) }}"
 {% if item['ssl_verify_client'] is defined and item['ssl_verify_client'] != '' %}
   SSLVerifyClient "{{ item['ssl_verify_client'] }}"
 {% endif %}
