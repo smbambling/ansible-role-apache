@@ -198,7 +198,7 @@ apache_vhosts:
 ```
 Sets the server default for the AllowEncodedSlashes declaration, which modifies the responses to URLs containing '\' and '/' characters. Valid options: 'on', 'off', 'nodecode'. Default: undef
 
-##### Directories
+##### Directories Directives
 
 ```yaml
 apache_vhosts:
@@ -304,7 +304,7 @@ satisfy: 'Any'
 ```
 Sets a Satisfy directive. It only works with Apache 2.2 and lower.
 
-#### Additoinal Includes
+##### Additional Include Directives
 
 ```yaml
 apache_vhosts:
@@ -340,6 +340,159 @@ Sets the Action directive for the Virtualhost
 
 ```yaml
 apache_vhosts:
+  - block: 'smc'
+```
+Specifies the list of things to which Apache blocks access. Valid option: 'scm', which blocks web access to .svn, .git, and .bzr directories. Default: undef
+
+```yaml
+apache_vhosts:
+  - headers:
+    - 'Set X-Robots-Tag "noindex, noarchive, nosnippet"'
+```
+Array of Header directives to be set in the Virutalhost.
+
+```yaml
+apache_vhosts:
+  - request_headers:
+    - 'append MirrorID "mirror 12"'
+    - 'unset MirrorID'
+```
+Array of Header directives to be set in the Virutalhost.
+
+```yaml
+apache_vhosts:
+  - redirects:
+      - redirect: '/index.html'
+        status: 'permanent'
+        destination: 'http://google.com'
+      - redirectmatch: '\.git(/.*|$)/'
+        stats: '404'
+        destination: 'http://www.example.com/1'
+```
+
+A list of hashes to create **Rediret** and/or **RedirectMatch** directives. Default: undef
+
+```yaml
+  apache_vhosts:
+    - rewrite_inherit: True
+```
+Sets the Apache `RewriteOptions Inherit` directive for the Virtualhost if defined.
+
+```yaml
+  apache_vhosts:
+    - rewrites:
+      - comment      => 'redirect IE'
+        rewrite_cond => ['%{HTTP_USER_AGENT} ^MSIE']
+        rewrite_rule => ['^index\.html$ welcome.html']
+```
+Creates URL rewrite rules. Expects an array of hashes, and the hash keys can be any of **comment**, **rewrite_base**, **rewrite_cond**, **rewrite_rule** or **rewrite_map**. Default: undef.
+
+##### SSL Directives
+
+```yaml
+  apache_vhosts:
+    - ssl: True
+ ```
+Enables/Disables SSL for the virtual host. SSL virtual hosts only respond to HTTPS queries.  Defaults to `apache_vhost_ssl`
+
+```yaml
+  apache_vhosts:
+    - ssl_cert:
+```
+The PEM-encoded certificate file, used for SSL/TLS configuration. Defaults to `apache_ssl_default_cert`
+
+```yaml
+  apache_vhosts:
+    - ssl_key:
+```
+The PEM-encoded private key file, used for SSL/TLS configuration. Defaults to `apache_ssl_default_key`
+
+```yaml
+  apache_vhosts:
+    - ssl_chain:
+```
+The optional all-in-one file where you can assemble the certificates of Certification Authorities (CA) which form the certificate chain of the server certificate . Default: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_certs_dir:
+```
+The directory containing Certificates of Certification Authorities (CAs), used for SSl/TLS configuration.  Defaults to `apache_ssl_certs_dir`
+
+```yaml
+  apache_vhosts:
+    - ssl_ca:
+```
+The all-in-one file where you can assemble the Certificates of Certification Authorities (CA) whose clients you deal with. Default: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_crl_path:
+```
+The directory where you keep the Certificate Revocation Lists (CRL) of Certification Authorities (CAs) whose clients you deal with
+
+```yaml
+  apache_vhosts:
+    - ssl_crl:
+```
+The all-in-one file where you can assemble the Certificate Revocation Lists (CRL) of Certification Authorities (CA) whose clients you deal with. Default: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_crl_check:
+```
+Enables certificate revocation list (CRL) checking, valid options are chain|leaf|none. Default: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_honorcipherorder:
+```
+Enables the servers preference when hoosing a cipher during an SSLv3 or TLSv1 handshake. Defaults to `apache_ssl_honorcipherorder`
+
+```yaml
+  apache_vhosts:
+    - ssl_protocol:
+```
+Sets the SSLProtocol directive to control which versions of the SSL/TLS protocol will be accepted in new connections.  Defaults to `apache_ssl_protocol`
+
+```yaml
+  apache_vhosts:
+    - ssl_cipher:
+```
+Configures the Cipher Suite the client is permitted to negotiate in the SSL handshake phase. Defaults to `apache_ssl_ciphersuite`
+
+```yaml
+  apache_vhosts:
+    - ssl_verify_client:
+```
+Sets the Certificate verification level for the Client Authentication. Defaults: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_verify_depth:
+```
+Sets how deeply mod_ssl should verify before deciding that the clients don't have a valid certificate. Default: undef
+
+```yaml
+  apache_vhosts:
+    - ssl_options:
+```
+Sets the SSLOptions directive, which configures various SSL engine run-time options. Defaults undef
+
+```yaml
+  apache_vhosts:
+    - ssl_openssl_conf_cmd:
+```
+Sets the SSLOpenSSLConfCmd directive, which provides direct configuration of OpenSSL parameters. Default: undef
+
+```yaml
+  apache_vhosts:
+    - custom_fragment:
+```
+Passes a string of custom configuration directives to place at the end of the virtual host configuration. Default: undef.
+
+```yaml
+apache_vhosts:
   - charset:
 ```
 Sets a default media charset value for the AddDefaultCharset directive, which is added to text/plain and text/html responses.
@@ -355,8 +508,6 @@ apache_vhosts:
   - ssl: False
 ```
 Enables/Disables SSL for the virtual host. SSL virtual hosts only respond to HTTPS queries. Default: See `apache_vhost_ssl`
-
-
 
 Dependencies
 ------------
