@@ -1,10 +1,10 @@
 ---
 - name: Test and Reload Apache
-  command: apachectl configtest
+  command: "{{ _apachectl }} configtest"
   notify: Reload Apache
 
 - name: Test and Restart Apache
-  command: apachectl configtest
+  command: "{{ _apachectl }} configtest"
   notify: Restart Apache
 
 - name: Reload Apache
