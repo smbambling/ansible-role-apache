@@ -18,14 +18,8 @@
 - name: Include configure.yml task list
   include: configure.yml
 
-- name: Get apachectl command path
-  command: 'which apachectl'
-  changed_when: false
-  check_mode: no
-  register: _apachectl
-
 - name: Get installed version of Apache
-  command: "{{ _apachectl }} -v"
+  command: "{{ _apache_apachectl }} -v"
   changed_when: false
   check_mode: no
   register: _apache_version_full

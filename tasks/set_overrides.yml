@@ -73,3 +73,8 @@
   set_fact:
     apache_ssl_default_key: "{{ _apache_ssl_default_key }}"
   when: apache_ssl_default_key is none
+
+- name: Set fact apache_apachectl
+  set_fact:
+    apache_apachectl: "{{ _apache_apachectl }}"
+  when: apache_apachectl is none

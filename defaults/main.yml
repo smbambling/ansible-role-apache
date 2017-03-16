@@ -15,6 +15,7 @@ apache_mod_dir:
 apache_log_dir:
 apache_vhost_dir:
 apache_ports_file: "{{ apache_conf_dir }}/ports.conf"
+apache_apachectl:
 
 # Mod_Status Defaults
 apache_mod_status_manage: True

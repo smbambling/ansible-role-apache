@@ -13,6 +13,7 @@ _apache_conf_file: 'httpd.conf'
 _apache_conf_dir: '/etc/httpd/conf'
 _apache_confd_dir: "{{ _apache_httpd_dir }}/conf.d"
 _apache_vhost_dir: "{{ _apache_httpd_dir }}/conf.d"
+_apache_apachectl: '/usr/sbin/apachectl'
 
 _apache_log_dir: '/var/log/httpd'
 _apache_ssl_certs_dir: '/etc/pki/tls/certs'
