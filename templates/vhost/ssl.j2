@@ -27,10 +27,10 @@
   SSLVerifyClient "{{ item['ssl_verify_client'] }}"
 {% endif %}
 {% if item['ssl_verify_depth'] is defined and item['ssl_verify_depth'] != '' %}
-  SSLVerifyDepth "{{ item['ssl_verify_depth'] }}"
+  SSLVerifyDepth {{ item['ssl_verify_depth'] }}
 {% endif %}
 {% if item['ssl_options'] is defined and item['ssl_options'] != '' %}
-  SSLOptions "{{ item['ssl_options'] }}"
+  SSLOptions {{ item['ssl_options'] }}
 {% endif %}
 {% if item['ssl_openssl_conf_cmd'] is defined and item['ssl_options'] != '' %}
   SSLOpenSSLConfCmd "{{ item['ssl_openssl_conf_cmd'] }}"
