@@ -1,39 +1,48 @@
+---
 # https://giorgos.sealabs.net/docker-cache-on-travis-and-docker-112.html
 sudo: required
-
 language: python
 python:
   - '2.7'
-
-# Spin off separate builds for each of the following versions of Ansible
 env:
   global:
-    - MOLECULE_VERSION='1.15.0'
+    - MOLECULE_VERSION='2.12.1'
+    - DOCKER_VERSION='2.2.1'
     - DOCKER_PY_VERSION='1.10.6'
+    - TESTINFRA_VERSION='1.11.1'
+    - PYTEST_VERSION='3.5.0'
+    - PYTEST_XDIST_VERSION='1.22.2'
+    - PYTEST_SUGAR_VERSION='0.9.1'
   matrix:
-    - ANSIBLE_VERSION='latest'
-    - ANSIBLE_VERSION='2.2.0'
-
+    - ANSIBLE_VERSION='2.5.0'
+    - ANSIBLE_VERSION='2.4.0'
 services:
   - docker
-
-before_install:
-  - rvm get stable --auto-dotfiles
-  - rvm default
-  - ruby -v
-
 install:
   - pip install --upgrade pip
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then
-      pip install ansible;
-    else
-      pip install ansible==$ANSIBLE_VERSION;
-    fi
+  - pip install ansible==$ANSIBLE_VERSION
   - ansible --version
   - pip install molecule==$MOLECULE_VERSION
+  - pip install docker==$DOCKER_VERSION
   - pip install docker-py==$DOCKER_PY_VERSION
-  - gem install bundler
-  - bundle install --path vendor/bundle
-
+  - pip install pytest==$PYTEST_VERSION
+  - pip install pytest-xdist==$PYTEST_XDIST_VERSION
+  - pip install pytest-sugar==$PYTEST_SUGAR_VERSION
+  - pip install testinfra==$TESTINFRA_VERSION
 script:
-  - bundle exec molecule test
+  - molecule test
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    secure: |-
+      IlgH8PlCQSdEwqDQwbtVE++DEbL9cYJI64gp2i92lYv5clG70DMp0jnC1V1i8V
+      zPCQb0da2ZQMi3ZyTAPtDFcJMkEPLQUU40AhT+1yL9Pxu6V8XGlCSsV4fdcSzxy
+      Ucwn0HDxrcnlinNxluEuunTLRvqdrYFVdSRNQCyxa3X6QBbjrttbhwE0jxqev2I
+      oxzadpJPDLwJWxFm5wHj5tInK6HiEsiyqX0AL+pRfBDtL65J2UYFa4oUZD1jVlh
+      gFcNUF43uRqNgr/AugFB4RngUT9JMaNGwPYeCZ+hz2gk+fEKOvTpeOKftBh9JzK
+      1MBHzwyTnoBusspK2prsS0YosseHO3Y0I9Gi5cj0tGS0zhcwxkP1ZHMLCcrRzTP
+      jySPH3s5lOovpMZ7MYBXtQTgYG/vCSLgLj3jMQzwCCOT2Kn//9Ls8Z+0aqProF3
+      BqoEEn4zrXD3tGNjMHhGXkf8VXgBO7d8ArJjeE/3PXZCWBMzmn50bpIaYWbSDo0
+      O/U1mMuNs8UoSLfdjkh/bh6WwvXMQakPDqiawQPXZTHjSpkMPgVmmZYovwIwQGGP
+      RrhGsWFv9ycF1/YMv7b1O5fGj9/fp7nEjy1SqLIFVXA5rtn0UtG/63GLH+Igs5ef
+      8iNmTSldzhLTqpiJ7ZJiyQ9dmxby0c8IAf+/dXqxS85zr7gYrvho=
