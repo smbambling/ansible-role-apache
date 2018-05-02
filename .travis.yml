@@ -18,6 +18,10 @@ env:
     - ANSIBLE_VERSION='2.4.0'
 services:
   - docker
+before_install:
+  # Enable IPv6 support for Docker on Travis CI
+  - echo '{"ipv6":true,"fixed-cidr-v6":"2001:db8:1::/64"}' | sudo tee /etc/docker/daemon.json
+  - sudo service docker restart
 install:
   - pip install --upgrade pip
   - pip install ansible==$ANSIBLE_VERSION
