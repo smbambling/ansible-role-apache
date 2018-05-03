@@ -7,5 +7,5 @@
     group: root
     setype: httpd_config_t
     mode: '0644'
-  when: "{{ apache_mod_status_manage }}"
+  when: apache_mod_status_manage
   notify: Test and Reload Apache
