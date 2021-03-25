@@ -59,7 +59,7 @@ pytest-xdist==1.22.2
 pytest-sugar==0.9.1
 python-dateutil==2.7.2
 python-gilt==1.2.1
-PyYAML==3.12
+PyYAML==5.4
 requests==2.18.4
 sh==1.12.14
 six==1.11.0
